@@ -1,0 +1,39 @@
+name: Recipebook
+version: 0.1.0
+description: A grav plugin that adds recipebook functionality to a grav setup
+icon: cutlery
+author:
+  name: Jacob Mastel
+  email: jacob@mastel.org
+homepage: https://github.com/jacobm001/grav-plugin-recipebook
+demo: http://demo.yoursite.com
+keywords: grav, plugin, etc
+bugs: https://github.com/jacobm001/grav-plugin-recipebook/issues
+docs: https://github.com/jacobm001/grav-plugin-recipebook/blob/develop/README.md
+license: MIT
+
+form:
+  validation: strict
+  fields:
+    enabled:
+      type: toggle
+      label: Plugin status
+      highlight: 1
+      default: 0
+      options:
+        1: Enabled
+        0: Disabled
+      validate:
+        type: bool
+    route_new:
+      type: text
+      label: Route - New Recipe
+      default: /recipebook/new
+    route_view:
+      type: text
+      label: Route - View Recipe
+      default: /recipebook/view
+    route_list:
+      type: text
+      label: Route - View Recipes
+      default: /recipebook

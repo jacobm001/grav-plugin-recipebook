@@ -1,0 +1,14 @@
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+
+<h1>Recipebook</h1>
+
+<ul>
+{% for recipe in recipes %}
+	<li><a href="{{ config.plugins.recipebook.route_view ~ "/" ~ recipe.id }}">{{ recipe.name }}</li>
+{% endfor %}
+</ul>
+
+
+{% endblock %}

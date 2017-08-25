@@ -1,0 +1,17 @@
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+
+{{ debug(recipe) }}
+
+<h1>{{ recipe.name }}</h1>
+
+<ul>
+{% for ingr in recipe.ingredients %}
+	<li>{{ ingr }}</li>
+{% endfor %}
+</ul>
+
+{{ recipe.directions|markdown }}
+
+{% endblock %}
