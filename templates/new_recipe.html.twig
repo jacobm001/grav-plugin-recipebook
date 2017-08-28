@@ -1,6 +1,8 @@
 {% extends 'partials/base.html.twig' %}
 
 {% block content %}
+    <h1>Enter a New Recipe</h1>
+
     <form method="post" action="{{ base_url_relative ~ uri.path }}">
             {% for field in form.fields %}
                 {% if field.type %}
@@ -10,8 +12,8 @@
                 {% endif %}
             {% endfor %}
 
-        {% include 'partials/pastebin/submit_button.html.twig' %}
+        {% include 'partials/recipebook/submit_button.html.twig' %}
 
-        {{ nonce_field('pastebin-new-form', 'pastebin-new-form-nonce')|raw }}
+        {{ nonce_field('recipebook-new-form', 'recipebook-new-form-nonce')|raw }}
     </form>
 {% endblock %}
