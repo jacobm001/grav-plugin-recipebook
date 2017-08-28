@@ -1,0 +1,17 @@
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+    <form method="post" action="{{ base_url_relative ~ uri.path }}">
+            {% for field in form.fields %}
+                {% if field.type %}
+                    <div>
+                        {% include ["forms/fields/#{field.type}/#{field.type}.html.twig", 'forms/fields/text/text.html.twig'] %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+        {% include 'partials/pastebin/submit_button.html.twig' %}
+
+        {{ nonce_field('pastebin-new-form', 'pastebin-new-form-nonce')|raw }}
+    </form>
+{% endblock %}
