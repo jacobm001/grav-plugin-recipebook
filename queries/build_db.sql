@@ -1,5 +1,6 @@
 create table recipes(
   id integer primary key autoincrement,
+  uuid text,
   user text,
   name text,
   notes text,
@@ -26,7 +27,8 @@ create index indx_ingredients_01 on ingredients(recipe_id);
 
 CREATE VIEW one_line_recipes as
   select
-    recipes.id
+    recipes.uuid
+    , recipes.id
     , recipes.name
     , recipes.notes
     , recipes.yields

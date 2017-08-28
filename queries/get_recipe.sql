@@ -1,5 +1,5 @@
 select
-  id
+  uuid
   , name
   , notes
   , yields
@@ -9,4 +9,4 @@ select
 from
   one_line_recipes
 where
-  id = ?
+  uuid = ?
