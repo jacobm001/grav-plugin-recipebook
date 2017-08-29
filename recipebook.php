@@ -33,8 +33,8 @@ class RecipebookPlugin extends Plugin
     {
         return [
             'onPluginsInitialized' => ['onPluginsInitialized', 1],
-            'onTwigTemplatePaths'  => ['onTwigTemplatePaths', 0]
-            // 'onTask.recipebook.new'  => ['newRecipe']
+            'onTwigTemplatePaths'  => ['onTwigTemplatePaths', 0],
+            'onTask.recipebook.new'  => ['newRecipe']
         ];
     }
 
@@ -171,5 +171,33 @@ class RecipebookPlugin extends Plugin
     {
         $twig = $this->grav['twig'];
         $twig->twig_paths[] = __DIR__ . '/templates';
+    }
+
+    public function newRecipe()
+    {
+        $uuid = uniqid();
+        $user = $this->grav['user']->username;
+
+        // build base recipe
+        $stmt = $this->db->prepare($this->queries['new_recipe']);
+        $stmt->bindParam(':uuid'      , $uuid);
+        $stmt->bindParam(':user'      , $user);
+        $stmt->bindParam(':name'      , $_POST['name']);
+        $stmt->bindParam(':yields'    , $_POST['yields']);
+        $stmt->bindParam(':directions', $_POST['directions']);
+        $stmt->execute();
+
+        // add each tag
+        $tags      = explode(',', $_POST['tags']);
+        $tag_query = $this->queries['new_recipe_ingr'];
+        foreach($tags as $tag) {
+            $submit_tag = trim($tag);
+        }
+
+        //add each ingredient
+        $ingredients = explode("\n", $_POST['ingredients']);
+        foreach($ingredients as $ingredient) {
+            $submit_ingr = trim($ingredient, "- ");
+        }
     }
 }
