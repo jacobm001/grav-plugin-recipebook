@@ -52,4 +52,4 @@ CREATE VIEW one_line_recipes as
   from
     recipes
   order by
-    recipes.name;
+    lower(recipes.name);
