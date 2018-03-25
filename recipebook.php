@@ -32,9 +32,10 @@ class RecipebookPlugin extends Plugin
     public static function getSubscribedEvents()
     {
         return [
-            'onPluginsInitialized' => ['onPluginsInitialized', 1],
-            'onTwigTemplatePaths'  => ['onTwigTemplatePaths', 0],
-            'onTask.recipebook.new'  => ['newRecipe']
+            'onPluginsInitialized'     => ['onPluginsInitialized', 1]
+            , 'onTwigTemplatePaths'    => ['onTwigTemplatePaths', 0]
+            , 'onTask.recipebook.new'  => ['newRecipe']
+            , 'onTask.recipebook.edit' => ['editRecipe']
         ];
     }
 
@@ -49,12 +50,14 @@ class RecipebookPlugin extends Plugin
         }
 
         $uri = $this->grav['uri'];
-        $len = strlen($this->config->get('plugins.recipebook.route_view'));
+        $view_len = strlen($this->config->get('plugins.recipebook.route_view'));
+        $edit_len = strlen($this->config->get('plugins.recipebook.route_edit'));
 
         if(
-            $uri->path() == $this->config->get('plugins.recipebook.route_new')
-            or $uri->path() == $this->config->get('plugins.recipebook.route_list')
-            or substr($uri->path(), 0, $len) == $this->config->get('plugins.recipebook.route_view')
+            $uri->path()                          == $this->config->get('plugins.recipebook.route_new')
+            or $uri->path()                       == $this->config->get('plugins.recipebook.route_list')
+            or substr($uri->path(), 0, $view_len) == $this->config->get('plugins.recipebook.route_view')
+            or substr($uri->path(), 0, $edit_len) == $this->config->get('plugins.recipebook.route_edit')
         ) {
             $this->enable([
                 'onPageInitialized' => ['onPageInitialized', 1]
@@ -112,28 +115,43 @@ class RecipebookPlugin extends Plugin
 
         // page merging should be done here
 
-        $page = new Page;
-        $len  = strlen($this->config->get('plugins.recipebook.route_view'));
+        $page     = new Page;
+        $view_len = strlen($this->config->get('plugins.recipebook.route_view'));
+        $edit_len = strlen($this->config->get('plugins.recipebook.route_edit'));
 
-        if( $uri->path() == $this->config->get('plugins.recipebook.route_new') ) {
-            $page->init(new \SplFileInfo(__DIR__ . "/pages/new_recipe.md"));
-        }
-
-        else if ( $uri->path() == $this->config->get('plugins.recipebook.route_list') ) {
+        if ( $uri->path() == $this->config->get('plugins.recipebook.route_list') ) {
             $page->init(new \SplFileInfo(__DIR__ . "/pages/recipebook.md"));
 
             $this->getRecipes();
         }
 
-        else if( substr($uri->path(), 0, $len) == $this->config->get('plugins.recipebook.route_view') ) {
+        else if( $uri->path() == $this->config->get('plugins.recipebook.route_new') ) {
+            $page->init(new \SplFileInfo(__DIR__ . "/pages/new_recipe.md"));
+        }
+
+        else if( substr($uri->path(), 0, $view_len) == $this->config->get('plugins.recipebook.route_view') ) {
             $page->init(new \SplFileInfo(__DIR__ . "/pages/recipe.md"));
-            $id = substr($uri->path(), $len+1);
+            $id = substr($uri->path(), $view_len + 1);
+            $this->getRecipe($id);
+        }
+
+        else if( substr($uri->path(), 0, $edit_len) == $this->config->get('plugins.recipebook.route_edit') ) {
+            $page->init(new \SplFileInfo(__DIR__ . "/pages/edit_recipe.md"));
+            $id = substr($uri->path(), $edit_len+1);
             $this->getRecipe($id);
         }
         
+        $page->parent($this->grav['pages']->find($this->config->get('plugins.recipebook.route_list')));
         $page->slug(basename($uri->path()));
+        $page->route($uri->path());
+
+        $this->grav['pages']->addPage($page, $uri->path());
+
         unset($this->grav['page']);
         $this->grav['page'] = $page;
+
+        $this->grav['debugger']->addMessage($page->active());
+        $this->grav['debugger']->addMessage($this->grav['pages']->routes());
     }
     
     public function getRecipes()
@@ -197,7 +215,12 @@ class RecipebookPlugin extends Plugin
         //add each ingredient
         $ingredients = explode("\n", $_POST['ingredients']);
         foreach($ingredients as $ingredient) {
-            $submit_ingr = trim($ingredient, "- ");
+            $submit_ingr = trim(trim($ingredient), "- ");
         }
+    }
+
+    public function editRecipe() 
+    {
+
     }
 }

@@ -33,6 +33,10 @@ form:
       type: text
       label: Route - View Recipe
       default: /recipebook/view
+    route_edit:
+      type: text
+      label: Route - Edit Recipe
+      default: /recipebook/edit
     route_list:
       type: text
       label: Route - View Recipes

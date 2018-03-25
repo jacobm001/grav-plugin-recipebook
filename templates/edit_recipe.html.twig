@@ -1,0 +1,21 @@
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+    <h1>Edit the Recipe</h1>
+
+    <form method="post" action="{{ base_url_relative ~ uri.path }}">
+            {% for field in form.fields %}
+                {% if field.type %}
+                    <div>
+                        {% include ["forms/fields/#{field.type}/#{field.type}.html.twig", 'forms/fields/text/text.html.twig'] %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+        {% include 'partials/recipebook/submit_button.html.twig' %}
+
+        {{ nonce_field('recipebook-edit-form', 'recipebook-edit-form-nonce')|raw }}
+    </form>
+
+    {{ content }}
+{% endblock %}

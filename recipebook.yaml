@@ -2,3 +2,4 @@ enabled: true
 route_list: /recipebook
 route_new: /recipebook/new
 route_view: /recipebook/view
+route_edit: /recipebook/edit
