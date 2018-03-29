@@ -201,21 +201,33 @@ class RecipebookPlugin extends Plugin
         $stmt->bindParam(':uuid'      , $uuid);
         $stmt->bindParam(':user'      , $user);
         $stmt->bindParam(':name'      , $_POST['name']);
+        $stmt->bindParam(':notes'     , $_POST['notes']);
         $stmt->bindParam(':yields'    , $_POST['yields']);
         $stmt->bindParam(':directions', $_POST['directions']);
         $stmt->execute();
 
         // add each tag
         $tags      = explode(',', $_POST['tags']);
-        $tag_query = $this->queries['new_recipe_ingr'];
+        $tag_query = $this->queries['new_recipe_tag'];
         foreach($tags as $tag) {
             $submit_tag = trim($tag);
+
+            $stmt = $this->prepare($tag_query);
+            $stmt->bindParam(':uuid', $uuid);
+            $stmt->bindParam(':tag', $submit_tag);
+            $stmt->execute();
         }
 
         //add each ingredient
-        $ingredients = explode("\n", $_POST['ingredients']);
+        $ingredients       = explode("\n", $_POST['ingredients']);
+        $ingredients_query = $this->queries['new_recipe_ingr'];
         foreach($ingredients as $ingredient) {
             $submit_ingr = trim(trim($ingredient), "- ");
+
+            $stmt = $this->prepare($ingredients_query);
+            $stmt->bindParam(':uuid'      , $uuid);
+            $stmt->bindParam(':ingredient', $submit_ingr);
+            $stmt->execute();
         }
     }
 
