@@ -1,6 +1,9 @@
 ---
 title: New Recipe
 
+access:
+  site.login: true
+
 form:
   name: recipebook-new
   method: post

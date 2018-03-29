@@ -1,6 +1,9 @@
 ---
 title: Edit Recipe
 
+access:
+  site.login: true
+
 cache_enable: false
 
 twig_first: true
