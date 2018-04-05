@@ -1,3 +1,9 @@
+{% if 'new' in uri.route(true) %}
+	{% set val = "recipebook.new" %}
+{% else %}
+	{% set val = "recipebook.edit" %}
+{% endif %}
+
 <div class="form-actions secondary-accent">
-    <button type="submit" class="button primary" name="task" value="pastebin.new">Submit</button>
+    <button type="submit" class="button primary" name="task" value="{{ val }}">Submit</button>
 </div>
