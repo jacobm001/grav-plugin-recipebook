@@ -1,5 +1,5 @@
-update recipes
-	set name     = :name
+update recipes set 
+	name         = :name
 	, notes      = :notes
 	, yields     = :yields
 	, directions = :directions
