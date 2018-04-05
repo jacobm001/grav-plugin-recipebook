@@ -233,6 +233,21 @@ class RecipebookPlugin extends Plugin
 
     public function editRecipe() 
     {
+        $path     = $this->grav['uri']->path();
+        $edit_len = strlen($this->config->get('plugins.recipebook.route_edit'));
+        $uuid     = substr($this->grav['uri']->path(), $edit_len+1, strlen($path));
 
+        $user = $this->grav['user']->username;
+
+        // update the base recipe
+        $stmt = $this->db->prepare($this->queries['edit_recipe']);
+        $stmt->bindParam(':name', $_POST['name']);
+        $stmt->bindParam(':notes', $_POST['notes']);
+        $stmt->bindParam(':yields', $_POST['yields']);
+        $stmt->bindParam(':directions', $_POST['directions']);
+
+        // delete tags and restore
+
+        // delete ingredients and restore
     }
 }
