@@ -231,6 +231,20 @@ class RecipebookPlugin extends Plugin
         }
     }
 
+    public function editRecipeBase($uuid)
+    {
+        // update the base recipe
+        $stmt = $this->db->prepare($this->queries['edit_recipe']);
+        
+        $stmt->bindParam(':uuid', $uuid);
+        $stmt->bindParam(':name', $_POST['name']);
+        $stmt->bindParam(':notes', $_POST['notes']);
+        $stmt->bindParam(':yields', $_POST['yields']);
+        $stmt->bindParam(':directions', $_POST['directions']);
+
+        return;
+    }
+
     public function editRecipe() 
     {
         $path     = $this->grav['uri']->path();
@@ -239,15 +253,8 @@ class RecipebookPlugin extends Plugin
 
         $user = $this->grav['user']->username;
 
-        // update the base recipe
-        $stmt = $this->db->prepare($this->queries['edit_recipe']);
-        $stmt->bindParam(':name', $_POST['name']);
-        $stmt->bindParam(':notes', $_POST['notes']);
-        $stmt->bindParam(':yields', $_POST['yields']);
-        $stmt->bindParam(':directions', $_POST['directions']);
-
+        editRecipeBase($uuid);
         // delete tags and restore
-
         // delete ingredients and restore
     }
 }
