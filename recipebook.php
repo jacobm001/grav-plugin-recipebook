@@ -241,7 +241,51 @@ class RecipebookPlugin extends Plugin
         $stmt->bindParam(':notes', $_POST['notes']);
         $stmt->bindParam(':yields', $_POST['yields']);
         $stmt->bindParam(':directions', $_POST['directions']);
+        $stmt->execute();
 
+        return;
+    }
+
+    public function editRecipeIngredients($uuid)
+    {
+        // delete ingredients
+        $stmt = $this->db->prepare($this->queries['delete_ingredients']);
+        $stmt->bindParam(':uuid', $uuid);
+        $stmt->execute();
+
+         //add each ingredient
+        $ingredients       = explode("\n", $_POST['ingredients']);
+        $ingredients_query = $this->queries['new_recipe_ingr'];
+        foreach($ingredients as $ingredient) {
+            $submit_ingr = trim(trim($ingredient), "- ");
+
+            if ( strcmp($submit_ingr, '') != 0 ) {
+                $stmt = $this->db->prepare($ingredients_query);
+                $stmt->bindParam(':uuid'      , $uuid);
+                $stmt->bindParam(':ingredient', $submit_ingr);
+                $stmt->execute();
+            }
+        }
+    }
+
+    public function editRecipeTags($uuid)
+    {
+        // delete tags
+        $stmt = $this->db->prepare($this->queries['delete_tags']);
+        $stmt->bindParam(':uuid', $uuid);
+        $stmt->execute();
+
+        // add each tag
+        $tags      = explode(',', $_POST['tags']);
+        $tag_query = $this->queries['new_recipe_tag'];
+        foreach($tags as $tag) {
+            $submit_tag = trim($tag);
+
+            $stmt = $this->db->prepare($tag_query);
+            $stmt->bindParam(':uuid', $uuid);
+            $stmt->bindParam(':tag', $submit_tag);
+            $stmt->execute();
+        }
         return;
     }
 
@@ -253,8 +297,13 @@ class RecipebookPlugin extends Plugin
 
         $user = $this->grav['user']->username;
 
-        editRecipeBase($uuid);
-        // delete tags and restore
-        // delete ingredients and restore
+        $this->editRecipeBase($uuid);
+        $this->editRecipeIngredients($uuid);
+        $this->editRecipeTags($uuid);
+
+        $redirect_route = $this->config->get('plugins.recipebook.route_view') . '/' . $uuid;
+        $this->grav->redirect($redirect_route, 302);
+
+        return;
     }
 }
