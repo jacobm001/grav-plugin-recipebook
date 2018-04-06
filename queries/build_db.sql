@@ -1,6 +1,5 @@
 create table recipes(
-  id integer primary key autoincrement,
-  uuid text,
+  uuid text primary key,
   user text,
   name text,
   notes text,
@@ -9,21 +8,22 @@ create table recipes(
 );
 
 create table tags (
-  id integer primary key autoincrement,
-  recipe_id integer,
+  uuid text,
   tag text,
-  foreign key(recipe_id) references recipes(id)
+  primary key(uuid, tag),
+  foreign key(uuid) references recipes(uuid)
 );
 
 create table ingredients (
-  id integer primary key autoincrement,
-  recipe_id integer,
+  uuid text,
   ingredient text,
+  primary key(uuid, ingredient),
   foreign key(recipe_id) references recipes(id)
 );
 
-create index indx_tags_01        on tags(recipe_id);
-create index indx_ingredients_01 on ingredients(recipe_id);
+create index indx_tags_01        on tags(uuid);
+create index indx_tags_02        on tags(tag);
+create index indx_ingredients_01 on ingredients(uuid);
 
 CREATE VIEW one_line_recipes as
   select
@@ -39,7 +39,7 @@ CREATE VIEW one_line_recipes as
       from
         ingredients
       where
-        ingredients.recipe_id = recipes.id
+        ingredients.uuid = recipes.uuid
     ) as ingredients
     , (
       select
@@ -47,7 +47,7 @@ CREATE VIEW one_line_recipes as
       from
         tags
       where
-        tags.recipe_id = recipes.id
+        tags.uuid = recipes.uuid
     ) as tags
   from
     recipes
