@@ -4,6 +4,10 @@
 
 <h1>Recipebook</h1>
 
+{% if grav.user.authenticated %}
+	{% include 'partials/recipebook/new_button.html.twig' %}
+{% endif %}
+
 <ul>
 {% for recipe in recipes %}
 	<li><a href="{{ config.plugins.recipebook.route_view ~ "/" ~ recipe.uuid }}">{{ recipe.name }}</li>
