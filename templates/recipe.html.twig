@@ -2,7 +2,9 @@
 
 {% block content %}
 
-{{ debug(recipe) }}
+{% if grav.user.authenticated %}
+	{% include 'partials/recipebook/edit_button.html.twig' %}
+{% endif %}
 
 <h1>{{ recipe.name }}</h1>
 
