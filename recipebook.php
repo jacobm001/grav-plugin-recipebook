@@ -212,7 +212,7 @@ class RecipebookPlugin extends Plugin
         foreach($tags as $tag) {
             $submit_tag = trim($tag);
 
-            $stmt = $this->prepare($tag_query);
+            $stmt = $this->db->prepare($tag_query);
             $stmt->bindParam(':uuid', $uuid);
             $stmt->bindParam(':tag', $submit_tag);
             $stmt->execute();
@@ -224,7 +224,7 @@ class RecipebookPlugin extends Plugin
         foreach($ingredients as $ingredient) {
             $submit_ingr = trim(trim($ingredient), "- ");
 
-            $stmt = $this->prepare($ingredients_query);
+            $stmt = $this->db->prepare($ingredients_query);
             $stmt->bindParam(':uuid'      , $uuid);
             $stmt->bindParam(':ingredient', $submit_ingr);
             $stmt->execute();
