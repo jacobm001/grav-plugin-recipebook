@@ -11,6 +11,8 @@ use Grav\Plugin\Login\Login;
 use Grav\Common\Plugin;
 use RocketTheme\Toolbox\Event\Event;
 
+// the 'use' keyword here works better
+// also drop the .php extension
 // include 'classes\recipe.php';
 
 /**
