@@ -11,7 +11,7 @@ use Grav\Plugin\Login\Login;
 use Grav\Common\Plugin;
 use RocketTheme\Toolbox\Event\Event;
 
-include 'classes\recipe.php';
+// include 'classes\recipe.php';
 
 /**
  * Class RecipebookPlugin
