@@ -8,9 +8,9 @@
 	{% include 'partials/recipebook/new_button.html.twig' %}
 {% endif %}
 
-<ul>
+<ul class="recipe-list">
 {% for recipe in recipes %}
-	<li><a href="{{ config.plugins.recipebook.route_view ~ "/" ~ recipe.uuid }}">{{ recipe.name }}</li>
+	<li class="recipe-list-item"><a href="{{ config.plugins.recipebook.route_view ~ "/" ~ recipe.uuid }}">{{ recipe.name }}</li>
 {% endfor %}
 </ul>
 
