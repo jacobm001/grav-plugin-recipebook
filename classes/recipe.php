@@ -151,7 +151,7 @@
 		public function jsonSerialize() 
 		{
 			return array(
-				'id'          => $this->id,
+				'uuid'        => $this->uuid,
 				'name'        => $this->name,
 				'yields'      => $this->yields,
 				'notes'       => $this->notes,
