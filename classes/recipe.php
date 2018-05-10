@@ -4,9 +4,9 @@
 		private $name;
 		private $yields;
 		private $notes;
-		private $ingredients = array();
 		private $directions;
-		private $tags = array();
+		private $ingredients = array();
+		private $tags        = array();
 
 		public function __construct(&$db, $uuid = null)
 		{
