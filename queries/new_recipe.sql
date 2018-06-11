@@ -1,2 +1,2 @@
-insert into recipes(uuid, user, name, yields, directions)
-  values(:uuid, :user, :name, :yields, :directions);
+insert into recipes(uuid, user, name, notes, yields, directions)
+  values(:uuid, :user, :name, :notes, :yields, :directions);
