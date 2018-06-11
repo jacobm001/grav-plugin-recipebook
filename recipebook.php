@@ -231,6 +231,9 @@ class RecipebookPlugin extends Plugin
             $stmt->bindParam(':ingredient', $submit_ingr);
             $stmt->execute();
         }
+
+        $redirect_route = $this->config->get('plugins.recipebook.route_view') . '/' . $uuid;
+        $this->grav->redirect($redirect_route, 302);
     }
 
     public function editRecipeBase($uuid)
