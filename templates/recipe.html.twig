@@ -1,12 +1,12 @@
 {% extends 'partials/base.html.twig' %}
 
+{% block content %}
+
 <style>
 .recipebook-inline-list li {
 	display: inline;
 }
 </style>
-
-{% block content %}
 
 {% if grav.user.authenticated %}
 	{% include 'partials/recipebook/edit_button.html.twig' %}
@@ -14,14 +14,16 @@
 
 <h1>{{ recipe.name }}</h1>
 
-<p><strong>Notes:</strong> {{ recipe.notes }}</p>
+<p><strong>Notes:</strong> {{ recipe.notes|markdown }}</p>
 
+<strong>Ingredients:</strong>
 <ul>
 {% for ingr in recipe.ingredients %}
 	<li>{{ ingr }}</li>
 {% endfor %}
 </ul>
 
+<strong>Directions:</strong>
 {{ recipe.directions|markdown }}
 
 <ul class="recipebook-inline-list">
