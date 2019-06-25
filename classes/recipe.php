@@ -10,7 +10,7 @@
 
 		public function __construct(&$db, $uuid = null)
 		{
-			if $uuid == null {
+			if( $uuid == null ) {
 				$this->id = $this->make_new_uuid();
 				return;
 			}
@@ -43,14 +43,14 @@
 
 		private function populate_recipe_base()
 		{
-			$qry = '''
+			$qry = "
 				select 
 					user, name, notes, yields, directions
 				from
 					recipes
 				where
 					uuid = :uuid;
-			''';
+			";
 
 			$stmt = $this->db->prepare($qry);
 			$stmt->bindParam(':uuid', $this->uuid, PDO::PARAM_INT);
@@ -67,11 +67,11 @@
 
 		private function populate_recipe_ingredients()
 		{
-			$qry = '''
+			$qry = "
 				select ingredient
 				from ingredients
 				where uuid = :uuid;
-			''';
+			";
 
 			$stmt = $this->db->prepare($qry);
 			$stmt->bindParam(':uuid', $this->uuid);
@@ -86,11 +86,11 @@
 
 		private function populate_recipe_tags()
 		{
-			$qry = '''
+			$qry = "
 				select tag
 				from tags
 				where uuid = :uuid;
-			''';
+			";
 
 			$stmt = $this->db->prepare($qry);
 			$stmt->bindParam(':uuid', $this->uuid);
