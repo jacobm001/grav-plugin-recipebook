@@ -25,6 +25,7 @@ form:
     - name: ingredients
       type: textarea
       id: ingredients
+      rows: 10
       placeholder: Accepts a markdown style list
       validate:
           required: true
