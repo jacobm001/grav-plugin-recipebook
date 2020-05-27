@@ -5,7 +5,7 @@
 		private $yields;
 		private $notes;
 		private $directions;
-		private $ingredients = array();
+		private $ingredients;
 		private $tags        = array();
 
 		public function __construct(&$db, $uuid = null)
@@ -17,6 +17,7 @@
 			else {
 				$this->uuid = $uuid;
 				$this->populate_recipe();
+				$this->populate_tags();
 			}
 		}
 
@@ -36,16 +37,9 @@
 
 		private function populate_recipe()
 		{
-			$this->populate_recipe_base();
-			$this->populate_recipe_ingredients();
-			$this->populate_recipe_tags();
-		}
-
-		private function populate_recipe_base()
-		{
 			$qry = "
 				select 
-					user, name, notes, yields, directions
+					user, name, notes, yields, ingredients, directions
 				from
 					recipes
 				where
@@ -58,30 +52,12 @@
 
 			$res = $stmt->fetchOne(PDO::FETCH_ASSOC);
 
-			$this->user       = $res['user'];
-			$this->name       = $res['name'];
-			$this->notes      = $res['notes'];
-			$this->yields     = $res['yields'];
-			$this->directions = $res['directions'];
-		}
-
-		private function populate_recipe_ingredients()
-		{
-			$qry = "
-				select ingredient
-				from ingredients
-				where uuid = :uuid;
-			";
-
-			$stmt = $this->db->prepare($qry);
-			$stmt->bindParam(':uuid', $this->uuid);
-			$stmt->execute();
-
-			$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-			foreach( $res as $ingr )
-			{
-				$this->ingredients[] = $ingr;
-			}
+			$this->user        = $res['user'];
+			$this->name        = $res['name'];
+			$this->notes       = $res['notes'];
+			$this->yields      = $res['yields'];
+			$this->ingredients = $ret['ingredients'];
+			$this->directions  = $res['directions'];
 		}
 
 		private function populate_recipe_tags()
@@ -113,17 +89,6 @@
 		{
 			if(!in_array($tag, $this->tags) and $tag != null) 
 				$this->tags[] = $tag;
-		}
-
-		public function set_ingr($ingr_str)
-		{
-			if( $ingr_str != "" )
-				$this->ingredients = explode('||', $ingr_str);
-		}
-
-		public function add_ingr($ingr)
-		{
-			$this->ingredients[] = $ingr;
 		}
 
 		public function get($req)
