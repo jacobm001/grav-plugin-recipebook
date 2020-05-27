@@ -11,6 +11,8 @@ use Grav\Plugin\Login\Login;
 use Grav\Common\Plugin;
 use RocketTheme\Toolbox\Event\Event;
 
+require 'classes/recipe.php';
+
 // the 'use' keyword here works better
 // also drop the .php extension
 // include 'classes\recipe.php';
@@ -173,18 +175,9 @@ class RecipebookPlugin extends Plugin
     public function getRecipe($id)
     {
         $this->grav['debugger']->addMessage('Getting recipe: ' . $id);
-
-        $stmt = $this->db->prepare($this->queries['get_recipe']);
-
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
-
-        $ret = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        $ret['ingredients'] = explode('||', $ret['ingredients']);
-        $ret['tags']        = explode('||', $ret['tags']);
-
-        $this->grav['twig']->twig_vars['recipe'] = $ret;
+        $recipe = new Recipe($this->db, $id);
+        $this->grav['debugger']->addMessage('Got recipe: ' . $recipe->get('name'));
+        $this->grav['twig']->twig_vars['recipe'] = $recipe->jsonSerialize();
     }
 
     public function onTwigTemplatePaths()

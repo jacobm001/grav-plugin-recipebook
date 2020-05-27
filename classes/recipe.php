@@ -1,17 +1,22 @@
 <?php
-	class Recipe implements JsonSerializable {
+	namespace Grav\Plugin;
+	use \PDO;
+
+	class Recipe {
 		private $uuid;
 		private $name;
 		private $yields;
 		private $notes;
 		private $directions;
 		private $ingredients;
-		private $tags        = array();
+		private $tags = array();
 
 		public function __construct(&$db, $uuid = null)
 		{
-			if( $uuid == null ) {
-				$this->id = $this->make_new_uuid();
+			$this->db = $db;
+			
+			if( is_null($uuid) ) {
+				$this->uuid = $this->make_new_uuid();
 				return;
 			}
 			else {
@@ -47,10 +52,10 @@
 			";
 
 			$stmt = $this->db->prepare($qry);
-			$stmt->bindParam(':uuid', $this->uuid, PDO::PARAM_INT);
+			$stmt->bindParam(':uuid', $this->uuid, PDO::PARAM_STR);
 			$stmt->execute();
 
-			$res = $stmt->fetchOne(PDO::FETCH_ASSOC);
+			$res = $stmt->fetch(PDO::FETCH_ASSOC);
 
 			$this->user        = $res['user'];
 			$this->name        = $res['name'];
@@ -60,7 +65,7 @@
 			$this->directions  = $res['directions'];
 		}
 
-		private function populate_recipe_tags()
+		private function populate_tags()
 		{
 			$qry = "
 				select tag
@@ -94,8 +99,8 @@
 		public function get($req)
 		{
 			switch($req) {
-				case 'id':
-					return $this->id;
+				case 'uuid':
+					return $this->uuid;
 				case 'name':
 					return $this->name;
 				case 'yields':

@@ -12,16 +12,14 @@
 	{% include 'partials/recipebook/edit_button.html.twig' %}
 {% endif %}
 
+{{ dump(recipe) }}
+
 <h1>{{ recipe.name }}</h1>
 
 <p><strong>Notes:</strong> {{ recipe.notes|markdown }}</p>
 
 <strong>Ingredients:</strong>
-<ul>
-{% for ingr in recipe.ingredients %}
-	<li>{{ ingr }}</li>
-{% endfor %}
-</ul>
+{{ recipe.ingredients|markdown }}
 
 <strong>Directions:</strong>
 {{ recipe.directions|markdown }}
