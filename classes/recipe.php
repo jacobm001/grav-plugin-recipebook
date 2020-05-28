@@ -61,7 +61,7 @@
 			$this->name        = $res['name'];
 			$this->notes       = $res['notes'];
 			$this->yields      = $res['yields'];
-			$this->ingredients = $ret['ingredients'];
+			$this->ingredients = $res['ingredients'];
 			$this->directions  = $res['directions'];
 		}
 
