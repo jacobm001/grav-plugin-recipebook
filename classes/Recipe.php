@@ -5,6 +5,7 @@
 	class Recipe 
 	{
 		private $uuid;
+		public $user;
 		public $name;
 		public $yields;
 		public $notes;
@@ -97,7 +98,7 @@
 
 		public function build_from_post($post)
 		{
-			$this->name        = $post['name'];;
+			$this->name        = $post['name'];
         	$this->notes       = $post['notes'];
         	$this->yields      = $post['yields'];
         	$this->ingredients = $post['ingredients'];
@@ -107,7 +108,12 @@
         	$tags = explode(',', $post['tags']);
         	foreach( $tags as $tag )
 	            $this->add_tag($tag);
-			}
+		}
+
+		public function set_user($user)
+		{
+			$this->user = $user;
+		}
 
 		public function save_recipe()
 		{

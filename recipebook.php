@@ -177,6 +177,7 @@ class RecipebookPlugin extends Plugin
 
         // set the base recipe values
         $recipe = new Recipe($this->db);
+        $recipe->set_user($user);
         $recipe->build_from_post($_POST);
         $recipe->save_recipe();
 
@@ -193,6 +194,7 @@ class RecipebookPlugin extends Plugin
 
         // set the base recipe values
         $recipe = new Recipe($this->db, $uuid);
+        $recipe->set_user($user);
         $recipe->build_from_post($_POST);
 
         // set the tags
