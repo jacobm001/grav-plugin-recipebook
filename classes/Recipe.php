@@ -95,16 +95,53 @@
 			return $this->tags;
 		}
 
+		public function build_from_post($post)
+		{
+			$this->name        = $post['name'];;
+        	$this->notes       = $post['notes'];
+        	$this->yields      = $post['yields'];
+        	$this->ingredients = $post['ingredients'];
+        	$this->directions  = $post['directions'];
+
+        	// set the tags
+        	$tags = explode(',', $post['tags']);
+        	foreach( $tags as $tag )
+	            $this->add_tag($tag);
+			}
+
+		public function save_recipe()
+		{
+			$this->db->beginTransaction();
+
+			$stmt = $this->db->prepare("
+				insert into recipes(uuid, user, name, notes, yields, ingredients, directions)
+				  values(:uuid, :user, :name, :notes, :yields, :ingredients, :directions);"
+			);
+
+			$stmt->bindParam(':uuid', $this->uuid);
+			$stmt->bindParam(':name', $this->name);
+			$stmt->bindParam(':notes', $this->notes);
+			$stmt->bindParam(':yields', $this->yields);
+			$stmt->bindParam(':ingredients', $this->ingredients);
+			$stmt->bindParam(':directions', $this->directions);
+			$stmt->execute();
+
+			$this->save_tags();
+
+			$this->db->commit();
+		}
+
 		public function update_recipe()
 		{
 			$this->db->beginTransaction();
 
 			$stmt = $this->prepare("
 				update recipes set 
-					name         = :name
-					, notes      = :notes
-					, yields     = :yields
-					, directions = :directions
+					name          = :name
+					, notes       = :notes
+					, yields      = :yields
+					, ingredients = :ingredients
+					, directions  = :directions
 				where
 					uuid = :uuid;"
 			);

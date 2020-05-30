@@ -173,42 +173,12 @@ class RecipebookPlugin extends Plugin
 
     public function newRecipe()
     {
-        $uuid = uniqid();
         $user = $this->grav['user']->username;
 
-        // build base recipe
-        $stmt = $this->db->prepare($this->queries['new_recipe']);
-        $stmt->bindParam(':uuid'      , $uuid);
-        $stmt->bindParam(':user'      , $user);
-        $stmt->bindParam(':name'      , $_POST['name']);
-        $stmt->bindParam(':notes'     , $_POST['notes']);
-        $stmt->bindParam(':yields'    , $_POST['yields']);
-        $stmt->bindParam(':directions', $_POST['directions']);
-        $stmt->execute();
-
-        // add each tag
-        $tags      = explode(',', $_POST['tags']);
-        $tag_query = $this->queries['new_recipe_tag'];
-        foreach($tags as $tag) {
-            $submit_tag = trim($tag);
-
-            $stmt = $this->db->prepare($tag_query);
-            $stmt->bindParam(':uuid', $uuid);
-            $stmt->bindParam(':tag', $submit_tag);
-            $stmt->execute();
-        }
-
-        //add each ingredient
-        $ingredients       = explode("\n", $_POST['ingredients']);
-        $ingredients_query = $this->queries['new_recipe_ingr'];
-        foreach($ingredients as $ingredient) {
-            $submit_ingr = trim(trim($ingredient), "- ");
-
-            $stmt = $this->db->prepare($ingredients_query);
-            $stmt->bindParam(':uuid'      , $uuid);
-            $stmt->bindParam(':ingredient', $submit_ingr);
-            $stmt->execute();
-        }
+        // set the base recipe values
+        $recipe = new Recipe($this->db);
+        $recipe->build_from_post($_POST);
+        $recipe->save_recipe();
 
         $redirect_route = $this->config->get('plugins.recipebook.route_view') . '/' . $uuid;
         $this->grav->redirect($redirect_route, 302);
@@ -222,12 +192,8 @@ class RecipebookPlugin extends Plugin
         $user     = $this->grav['user']->username;
 
         // set the base recipe values
-        $recipe = new Recipe($uuid);
-        $recipe->name        = $_POST['name'];;
-        $recipe->notes       = $_POST['notes'];
-        $recipe->yields      = $_POST['yields'];
-        $recipe->ingredients = $_POST['ingredients'];
-        $recipe->directions  = $_POST['directions'];
+        $recipe = new Recipe($this->db, $uuid);
+        $recipe->build_from_post($_POST);
 
         // set the tags
         $tags = explode(',', $_POST['tags']);
