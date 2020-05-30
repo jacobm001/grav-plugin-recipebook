@@ -214,27 +214,6 @@ class RecipebookPlugin extends Plugin
         $this->grav->redirect($redirect_route, 302);
     }
 
-    public function editRecipeTags($uuid)
-    {
-        // delete tags
-        $stmt = $this->db->prepare($this->queries['delete_tags']);
-        $stmt->bindParam(':uuid', $uuid);
-        $stmt->execute();
-
-        // add each tag
-        $tags      = explode(',', $_POST['tags']);
-        $tag_query = $this->queries['new_recipe_tag'];
-        foreach($tags as $tag) {
-            $submit_tag = trim($tag);
-
-            $stmt = $this->db->prepare($tag_query);
-            $stmt->bindParam(':uuid', $uuid);
-            $stmt->bindParam(':tag', $submit_tag);
-            $stmt->execute();
-        }
-        return;
-    }
-
     public function editRecipe() 
     {
         $path     = $this->grav['uri']->path();
@@ -242,7 +221,7 @@ class RecipebookPlugin extends Plugin
         $uuid     = substr($this->grav['uri']->path(), $edit_len+1, strlen($path));
         $user     = $this->grav['user']->username;
 
-        // update the base recipe
+        // set the base recipe values
         $recipe = new Recipe($uuid);
         $recipe->name        = $_POST['name'];;
         $recipe->notes       = $_POST['notes'];
@@ -250,12 +229,15 @@ class RecipebookPlugin extends Plugin
         $recipe->ingredients = $_POST['ingredients'];
         $recipe->directions  = $_POST['directions'];
 
+        // set the tags
         $tags = explode(',', $_POST['tags']);
         foreach( $tags as $tag )
             $recipe->add_tag($tag);
 
+        // allow the recipe object to handle the db stuff
         $recipe->update_recipe();
 
+        // redirect to the recipe view page
         $redirect_route = $this->config->get('plugins.recipebook.route_view') . '/' . $uuid;
         $this->grav->redirect($redirect_route, 302);
 
