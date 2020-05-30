@@ -197,11 +197,6 @@ class RecipebookPlugin extends Plugin
         $recipe->set_user($user);
         $recipe->build_from_post($_POST);
 
-        // set the tags
-        $tags = explode(',', $_POST['tags']);
-        foreach( $tags as $tag )
-            $recipe->add_tag($tag);
-
         // allow the recipe object to handle the db stuff
         $recipe->update_recipe();
 
