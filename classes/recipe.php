@@ -2,7 +2,8 @@
 	namespace Grav\Plugin;
 	use \PDO;
 
-	class Recipe {
+	class Recipe 
+	{
 		private $uuid;
 		private $name;
 		private $yields;
@@ -11,7 +12,7 @@
 		private $ingredients;
 		private $tags = array();
 
-		public function __construct(&$db, $uuid = null)
+		public function __construct($uuid = null)
 		{
 			$this->db = $db;
 			
