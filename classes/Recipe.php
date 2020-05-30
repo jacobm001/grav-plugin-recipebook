@@ -117,19 +117,23 @@
 			$stmt->bindParam(':directions', $this->directions);
 			$stmt->execute();
 
-			$this->update_tags();
+			$this->delete_db_tags();
+			$this->save_tags();
 
 			$this->db->commit();
 		}
 
-		private function update_tags()
+		private function delete_db_tags()
 		{
 			$stmt = $this->db->prepare("
 				delete from tags where uuid = :uuid;
 			");
 			$stmt->bindParam(':uuid', $this->uuid);
 			$stmt->execute();
+		}
 
+		private function save_tags()
+		{
 			$stmt = $this->db->prepare("
 				insert into tags(uuid, tag) values (:uuid, :tags); 
 			");
