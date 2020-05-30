@@ -12,7 +12,7 @@
 		private $ingredients;
 		private $tags = array();
 
-		public function __construct($uuid = null)
+		public function __construct(&$db, $uuid = null)
 		{
 			$this->db = $db;
 			
