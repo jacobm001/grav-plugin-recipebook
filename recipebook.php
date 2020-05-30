@@ -11,7 +11,7 @@ use Grav\Plugin\Login\Login;
 use Grav\Common\Plugin;
 use RocketTheme\Toolbox\Event\Event;
 
-require 'classes/recipe.php';
+require 'classes/Recipe.php';
 
 // the 'use' keyword here works better
 // also drop the .php extension
@@ -93,22 +93,7 @@ class RecipebookPlugin extends Plugin
         return true;
     }
 
-    public function get_queries()
-    {
-        $dir = new DirectoryIterator(__DIR__ . "/queries");
-        $this->queries = [];
-
-        foreach($dir as $fileinfo) {
-            if(!$fileinfo->isDir()) {
-                $name = $fileinfo->getBasename('.sql');
-                $text = file_get_contents($fileinfo->getPathName());
-
-                $this->queries[$name] = $text;
-            }
-        }
-    }
-    
-     public function onPageInitialized()
+    public function onPageInitialized()
     {
         $uri  = $this->grav['uri'];
         $page = $this->grav['page'];
@@ -163,13 +148,13 @@ class RecipebookPlugin extends Plugin
         $this->grav['debugger']->addMessage('Getting recipe listing');
         
         $ret  = array();
-        $stmt = $this->db->prepare($this->queries['get_recipes']);
+        $stmt = $this->db->prepare("select uuid, name from recipes;");
         $stmt->execute();
 
         $ret = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $this->grav['twig']->twig_vars['recipes'] = $ret;
-        $this->grav['debugger']->addMessage('Finished getting listing');
+        $this->grav['debugger']->addMessage('Retrieved ' . count($ret) . ' recipes');
     }
 
     public function getRecipe($id)
@@ -229,43 +214,6 @@ class RecipebookPlugin extends Plugin
         $this->grav->redirect($redirect_route, 302);
     }
 
-    public function editRecipeBase($uuid)
-    {
-        // update the base recipe
-        $stmt = $this->db->prepare($this->queries['edit_recipe']);
-        
-        $stmt->bindParam(':uuid', $uuid);
-        $stmt->bindParam(':name', $_POST['name']);
-        $stmt->bindParam(':notes', $_POST['notes']);
-        $stmt->bindParam(':yields', $_POST['yields']);
-        $stmt->bindParam(':directions', $_POST['directions']);
-        $stmt->execute();
-
-        return;
-    }
-
-    public function editRecipeIngredients($uuid)
-    {
-        // delete ingredients
-        $stmt = $this->db->prepare($this->queries['delete_ingredients']);
-        $stmt->bindParam(':uuid', $uuid);
-        $stmt->execute();
-
-         //add each ingredient
-        $ingredients       = explode("\n", $_POST['ingredients']);
-        $ingredients_query = $this->queries['new_recipe_ingr'];
-        foreach($ingredients as $ingredient) {
-            $submit_ingr = trim(trim($ingredient), "- ");
-
-            if ( strcmp($submit_ingr, '') != 0 ) {
-                $stmt = $this->db->prepare($ingredients_query);
-                $stmt->bindParam(':uuid'      , $uuid);
-                $stmt->bindParam(':ingredient', $submit_ingr);
-                $stmt->execute();
-            }
-        }
-    }
-
     public function editRecipeTags($uuid)
     {
         // delete tags
@@ -292,12 +240,21 @@ class RecipebookPlugin extends Plugin
         $path     = $this->grav['uri']->path();
         $edit_len = strlen($this->config->get('plugins.recipebook.route_edit'));
         $uuid     = substr($this->grav['uri']->path(), $edit_len+1, strlen($path));
+        $user     = $this->grav['user']->username;
 
-        $user = $this->grav['user']->username;
+        // update the base recipe
+        $recipe = new Recipe($uuid);
+        $recipe->name        = $_POST['name'];;
+        $recipe->notes       = $_POST['notes'];
+        $recipe->yields      = $_POST['yields'];
+        $recipe->ingredients = $_POST['ingredients'];
+        $recipe->directions  = $_POST['directions'];
 
-        $this->editRecipeBase($uuid);
-        $this->editRecipeIngredients($uuid);
-        $this->editRecipeTags($uuid);
+        $tags = explode(',', $_POST['tags']);
+        foreach( $tags as $tag )
+            $recipe->add_tag($tag);
+
+        $recipe->update_recipe();
 
         $redirect_route = $this->config->get('plugins.recipebook.route_view') . '/' . $uuid;
         $this->grav->redirect($redirect_route, 302);

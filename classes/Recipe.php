@@ -5,11 +5,11 @@
 	class Recipe 
 	{
 		private $uuid;
-		private $name;
-		private $yields;
-		private $notes;
-		private $directions;
-		private $ingredients;
+		public $name;
+		public $yields;
+		public $notes;
+		public $directions;
+		public $ingredients;
 		private $tags = array();
 
 		public function __construct(&$db, $uuid = null)
@@ -80,43 +80,63 @@
 
 			$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			foreach( $res as $tag )
-			{
 				$this->tags[] = $tag;
-			}
-		}
-
-		public function set_tag($tag_str)
-		{
-			if( $tag_str != "" )
-				$this->tags = explode('||', $tag_str);
 		}
 
 		public function add_tag($tag)
 		{
+			$tag = trim($tag);
 			if(!in_array($tag, $this->tags) and $tag != null) 
 				$this->tags[] = $tag;
 		}
 
-		public function get($req)
+		public function get_tags()
 		{
-			switch($req) {
-				case 'uuid':
-					return $this->uuid;
-				case 'name':
-					return $this->name;
-				case 'yields':
-					return $this->yields;
-				case 'notes':
-					return $this->notes;
-				case 'ingredients':
-					return $this->ingredients;
-				case 'directions':
-					return $this->directions;
-				case 'tags':
-					return $this->tags;
-				default:
-					return -17;
-			}
+			return $this->tags;
+		}
+
+		public function update_recipe()
+		{
+			$this->db->beginTransaction();
+
+			$stmt = $this->prepare("
+				update recipes set 
+					name         = :name
+					, notes      = :notes
+					, yields     = :yields
+					, directions = :directions
+				where
+					uuid = :uuid;"
+			);
+
+			$stmt->bindParam(':uuid', $this->uuid);
+			$stmt->bindParam(':name', $this->name);
+			$stmt->bindParam(':notes', $this->notes);
+			$stmt->bindParam(':yields', $this->yields);
+			$stmt->bindParam(':ingredients', $this->ingredients);
+			$stmt->bindParam(':directions', $this->directions);
+			$stmt->execute();
+
+			$this->update_tags();
+
+			$this->db->commit();
+		}
+
+		private function update_tags()
+		{
+			$stmt = $this->db->prepare("
+				delete from tags where uuid = :uuid;
+			");
+			$stmt->bindParam(':uuid', $this->uuid);
+			$stmt->execute();
+
+			$stmt = $this->db->prepare("
+				insert into tags(uuid, tag) values (:uuid, :tags); 
+			");
+
+			$stmt->bindParam(':uuid', $this->uuid);
+			$stmt->bindParam(':tags', $this->tags);
+			$stmt->execute();
 		}
 
 		public function jsonSerialize() 
