@@ -11,7 +11,7 @@
 		public $notes;
 		public $directions;
 		public $ingredients;
-		private $tags = array();
+		private $tags = [];
 
 		public function __construct(&$db, $uuid = null)
 		{
@@ -80,8 +80,9 @@
 			$stmt->execute();
 
 			$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-			foreach( $res as $tag )
-				$this->tags[] = $tag;
+			foreach( $res as $tag ) {
+				$this->tags[] = $tag['tag'];
+			}
 		}
 
 		public function add_tag($tag)
@@ -141,7 +142,7 @@
 		{
 			$this->db->beginTransaction();
 
-			$stmt = $this->prepare("
+			$stmt = $this->db->prepare("
 				update recipes set 
 					name          = :name
 					, notes       = :notes
@@ -177,13 +178,19 @@
 
 		private function save_tags()
 		{
-			$stmt = $this->db->prepare("
-				insert into tags(uuid, tag) values (:uuid, :tags); 
-			");
+			// $this->db->beginTransaction();
+			
+			foreach( $this->tags as $tag) {
+				$stmt = $this->db->prepare("
+					insert into tags(uuid, tag) values (:uuid, :tag); 
+				");
 
-			$stmt->bindParam(':uuid', $this->uuid);
-			$stmt->bindParam(':tags', $this->tags);
-			$stmt->execute();
+				$stmt->bindParam(':uuid', $this->uuid);
+				$stmt->bindParam(':tag', $tag);
+				$stmt->execute();
+			}
+
+			// $this->db->commit();
 		}
 
 		public function jsonSerialize() 

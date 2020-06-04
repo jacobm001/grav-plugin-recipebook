@@ -58,19 +58,9 @@ form:
   $("#name").val(r.name);
   $("#notes").val(r.notes);
   $("#yields").val(r.yields);
+  $("#ingredients").val(r.ingredients);
   $("#directions").val(r.directions);
-  
-  // switch to for/in loop
-  var ingr_list = "";
-  for (ingr in r.ingredients) { 
-    ingr_list += "- " + r.ingredients[ingr] + "\n";
-  }
-  $("#ingredients").val(ingr_list);
 
-  var tag_list = "";
-  for (tag in r.tags) {
-    tag_list += r.tags[tag] + ", ";
-  }
-  tag_list = tag_list.substring(0, tag_list.length - 2);
+  var tag_list = r.tags.join(', ');
   $("#tags").val(tag_list);
 </script>

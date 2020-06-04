@@ -67,7 +67,6 @@ class RecipebookPlugin extends Plugin
                 'onPageInitialized' => ['onPageInitialized', 1]
             ]);
 
-            $this->get_queries();
             $this->init_db();
         }
 
@@ -76,12 +75,12 @@ class RecipebookPlugin extends Plugin
 
     public function init_db()
     {
-        if(!file_exists(DATA_DIR . "/recipebook.db")) {
-            $this->grav['debugger']->addMessage('Recipebook database not found. Building a new one...');
+        // if(!file_exists(DATA_DIR . "/recipebook.db")) {
+        //     $this->grav['debugger']->addMessage('Recipebook database not found. Building a new one...');
 
-            $this->db = new PDO('sqlite:' . DATA_DIR . 'recipebook.db');
-            $this->db->exec($this->queries['build_db']);
-        }
+        //     $this->db = new PDO('sqlite:' . DATA_DIR . 'recipebook.db');
+        //     $this->db->exec($this->queries['build_db']);
+        // }
 
         try {
             $this->db = new PDO('sqlite:' . DATA_DIR . 'recipebook.db');
@@ -161,7 +160,7 @@ class RecipebookPlugin extends Plugin
     {
         $this->grav['debugger']->addMessage('Getting recipe: ' . $id);
         $recipe = new Recipe($this->db, $id);
-        $this->grav['debugger']->addMessage('Got recipe: ' . $recipe->get('name'));
+        $this->grav['debugger']->addMessage('Got recipe: ' . $recipe->name);
         $this->grav['twig']->twig_vars['recipe'] = $recipe->jsonSerialize();
     }
 
