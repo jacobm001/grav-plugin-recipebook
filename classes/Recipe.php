@@ -79,9 +79,9 @@
 			$stmt->bindParam(':uuid', $this->uuid);
 			$stmt->execute();
 
-			$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-			foreach( $res as $tag ) {
-				$this->tags[] = $tag['tag'];
+			$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			foreach( $rows as $row ) {
+				$this->tags[] = $row['tag'];
 			}
 		}
 
