@@ -147,7 +147,7 @@ class RecipebookPlugin extends Plugin
         $this->grav['debugger']->addMessage('Getting recipe listing');
         
         $ret  = array();
-        $stmt = $this->db->prepare("select uuid, name from recipes;");
+        $stmt = $this->db->prepare("select uuid, name from recipes order by name;");
         $stmt->execute();
 
         $ret = $stmt->fetchAll(PDO::FETCH_ASSOC);
