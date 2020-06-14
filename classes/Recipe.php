@@ -34,7 +34,7 @@
 				$trial_uuid = uniqid();
 
 				$stmt = $this->db->prepare('select 1 from recipes where uuid = :trial_uuid;');
-				$stmt->bindParam(':trial_uuid', $trial_uuid, PDO::PARAM_INT);
+				$stmt->bindParam(':trial_uuid', $trial_uuid, PDO::PARAM_STR);
 				$stmt->execute();
 
 				if( $stmt->fetch() == false )

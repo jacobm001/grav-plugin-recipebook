@@ -128,7 +128,7 @@ class RecipebookPlugin extends Plugin
             $id = substr($uri->path(), $edit_len+1);
             $this->getRecipe($id);
         }
-        
+
         $page->parent($this->grav['pages']->find($this->config->get('plugins.recipebook.route_list')));
         $page->slug(basename($uri->path()));
         $page->route($uri->path());
@@ -141,11 +141,11 @@ class RecipebookPlugin extends Plugin
         $this->grav['debugger']->addMessage($page->active());
         $this->grav['debugger']->addMessage($this->grav['pages']->routes());
     }
-    
+
     public function getRecipes()
     {
         $this->grav['debugger']->addMessage('Getting recipe listing');
-        
+
         $ret  = array();
         $stmt = $this->db->prepare("select uuid, name from recipes;");
         $stmt->execute();
@@ -184,7 +184,7 @@ class RecipebookPlugin extends Plugin
         $this->grav->redirect($redirect_route, 302);
     }
 
-    public function editRecipe() 
+    public function editRecipe()
     {
         $path     = $this->grav['uri']->path();
         $edit_len = strlen($this->config->get('plugins.recipebook.route_edit'));
