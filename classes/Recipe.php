@@ -2,7 +2,7 @@
 	namespace Grav\Plugin;
 	use \PDO;
 
-	class Recipe 
+	class Recipe
 	{
 		private $uuid;
 		public $user;
@@ -16,7 +16,7 @@
 		public function __construct(&$db, $uuid = null)
 		{
 			$this->db = $db;
-			
+
 			if( is_null($uuid) ) {
 				$this->uuid = $this->make_new_uuid();
 				return;
@@ -32,7 +32,7 @@
 		{
 			while( True ) {
 				$trial_uuid = uniqid();
-				
+
 				$stmt = $this->db->prepare('select 1 from recipes where uuid = :trial_uuid;');
 				$stmt->bindParam(':trial_uuid', $trial_uuid, PDO::PARAM_INT);
 				$stmt->execute();
@@ -45,7 +45,7 @@
 		private function populate_recipe()
 		{
 			$qry = "
-				select 
+				select
 					user, name, notes, yields, ingredients, directions
 				from
 					recipes
@@ -88,7 +88,7 @@
 		public function add_tag($tag)
 		{
 			$tag = trim($tag);
-			if(!in_array($tag, $this->tags) and $tag != null) 
+			if(!in_array($tag, $this->tags) and $tag != null)
 				$this->tags[] = $tag;
 		}
 
@@ -143,7 +143,7 @@
 			$this->db->beginTransaction();
 
 			$stmt = $this->db->prepare("
-				update recipes set 
+				update recipes set
 					name          = :name
 					, notes       = :notes
 					, yields      = :yields
@@ -179,10 +179,10 @@
 		private function save_tags()
 		{
 			// $this->db->beginTransaction();
-			
+
 			foreach( $this->tags as $tag) {
 				$stmt = $this->db->prepare("
-					insert into tags(uuid, tag) values (:uuid, :tag); 
+					insert into tags(uuid, tag) values (:uuid, :tag);
 				");
 
 				$stmt->bindParam(':uuid', $this->uuid);
@@ -193,7 +193,7 @@
 			// $this->db->commit();
 		}
 
-		public function jsonSerialize() 
+		public function jsonSerialize()
 		{
 			return array(
 				'uuid'        => $this->uuid,
