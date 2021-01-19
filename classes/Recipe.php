@@ -205,5 +205,10 @@
 				'tags'        => $this->tags
 			);
 		}
+
+		public function get_slug()
+		{
+			return $this->uuid;
+		}
 	}
 ?>

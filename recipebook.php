@@ -180,7 +180,7 @@ class RecipebookPlugin extends Plugin
         $recipe->build_from_post($_POST);
         $recipe->save_recipe();
 
-        $redirect_route = $this->config->get('plugins.recipebook.route_view') . '/' . $recipe->uuid;
+        $redirect_route = $this->config->get('plugins.recipebook.route_view') . '/' . $recipe->get_slug();
         $this->grav->redirect($redirect_route, 302);
     }
 
@@ -200,7 +200,7 @@ class RecipebookPlugin extends Plugin
         $recipe->update_recipe();
 
         // redirect to the recipe view page
-        $redirect_route = $this->config->get('plugins.recipebook.route_view') . '/' . $uuid;
+        $redirect_route = $this->config->get('plugins.recipebook.route_view') . '/' . $recipe->get_slug();
         $this->grav->redirect($redirect_route, 302);
 
         return;
