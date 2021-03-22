@@ -23,6 +23,11 @@ require 'classes/Recipe.php';
  */
 class RecipebookPlugin extends Plugin
 {
+
+    public $features = [
+        'blueprints' => 100
+    ];
+
     /**
      * @return array
      *

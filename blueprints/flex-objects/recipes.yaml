@@ -1,0 +1,162 @@
+title: Recipes
+description: Simple recipebook
+type: flex-objects
+
+# Flex Configuration
+config:
+  # Administration Configuration
+  admin:
+    # Admin router (optional)
+    router:
+      path: '/recipes'
+
+    # Admin menu (optional)
+    menu:
+      list:
+        route: '/recipes'
+        title: Recipes
+        icon: fa-utensils
+        # Authorization to collection admin
+        authorize: ['admin.recipes.list', 'admin.super']
+        # Priority -10 .. 10 (highest goes up)
+        priority: 2
+
+    # Admin template type / folder
+    template: default
+
+    # Permissions
+    permissions:
+      # Primary permissions
+      admin.recipes:
+        type: crudpl
+        label: Recipes
+
+    # List view
+    list:
+      title: title
+      options:
+        order:
+          by: title
+        per_page: 25
+      fields:
+        published:
+          field:
+            type: toggle
+            label: Publ
+          width: 8
+        title:
+          link: edit
+        tags:
+
+    # Edit View
+    edit:
+      title:
+        template: '{{ object.title ?? ''Title'' }}'
+
+    # Preview View
+    preview:
+      enabled: false
+      route:
+        #template: '/plugins/flex-objects/directory:recipes'
+
+    # Data Export
+    export:
+      enabled: true
+      method: 'jsonSerialize'
+      formatter:
+        class: 'Grav\Framework\File\Formatter\YamlFormatter'
+      filename: 'recipes'
+
+  # Site Configuration
+  site:
+    templates:
+      collection:
+        # Lookup for the template layout files for collections of objects
+        paths:
+          - 'flex/{TYPE}/collection/{LAYOUT}{EXT}'
+      object:
+        # Lookup for the template layout files for objects
+        paths:
+          - 'flex/{TYPE}/object/{LAYOUT}{EXT}'
+      defaults:
+        # Default template {TYPE}; overridden by filename of this blueprint if template folder exists
+        type: recipebook
+        # Default template {LAYOUT}; can be overridden in render calls (usually Twig in templates)
+        layout: default
+
+  # Data Configuration
+  data:
+    # Object class to be used, allowing custom methods for the object
+    object: 'Grav\Common\Flex\Types\Generic\GenericObject'
+    # Collection class to be used, allowing custom methods for the collections
+    collection: 'Grav\Common\Flex\Types\Generic\GenericCollection'
+    # Index class to be used, works as a quick database-like lookup index
+    index: 'Grav\Common\Flex\Types\Generic\GenericIndex'
+    storage:
+      # Storage class, use single file storage (does not support images and assets)
+      class: 'Grav\Framework\Flex\Storage\SimpleStorage'
+      options:
+        formatter:
+          # File formatter class, in this case the file is stored in markdown
+          class: 'Grav\Framework\File\Formatter\JsonFormatter'
+        # JSON file where all the objects will be stored
+        folder: user-data://flex-objects/recipes.json
+    search:
+      # Search options
+      options:
+        contains: 1
+      # Fields to be searched
+      fields:
+        - title
+        - description
+        - tags
+
+form:
+  validation: loose
+
+  fields:
+    published:
+      type: toggle
+      label: Published
+      highlight: 1
+      default: 1
+      options:
+        1: PLUGIN_ADMIN.YES
+        0: PLUGIN_ADMIN.NO
+      validate:
+        type: bool
+        required: true
+
+    title:
+      type: text
+      label: Title
+      validate:
+        required: true
+
+    yields:
+      type: text
+      label: Yields
+
+    notes:
+      type: textarea
+      label: Notes
+      validate:
+        required: true
+
+    ingredients:
+      type: markdown
+      label: Ingredients
+      validate:
+        required: true
+
+    directions:
+      type: markdown
+      label: Directions
+
+    tags:
+      type: selectize
+      size: large
+      label: Tags
+      classes: fancy
+      validate:
+        type: commalist
