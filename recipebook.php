@@ -83,7 +83,7 @@ class RecipebookPlugin extends Plugin
         $object = Grav::instance()->get('flex')->getObject($id, 'recipes');
 
         $block = $object->render('default', ['my_variable' => true]);
-        $page->content($block);
+        $page->setRawContent($block);
 
         $this->grav['debugger']->addMessage('Object Id: ' . $id);
         $this->grav['debugger']->addMessage('Object: ' . $object);
