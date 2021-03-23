@@ -1,0 +1,8 @@
+<div class="entry-details">
+	<h1>{{ object.title }}</h1>
+</div>
+<div class="entry-extra">
+	{% for tag in object.tags %}
+		<span>{{ tag|e }}</span>
+	{% endfor %}
+</div>

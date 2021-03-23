@@ -1,4 +1,4 @@
-title: Recipes
+title: recipes
 description: Simple recipebook
 type: flex-objects
 
@@ -80,7 +80,7 @@ config:
           - 'flex/{TYPE}/object/{LAYOUT}{EXT}'
       defaults:
         # Default template {TYPE}; overridden by filename of this blueprint if template folder exists
-        type: recipebook
+        type: recipes
         # Default template {LAYOUT}; can be overridden in render calls (usually Twig in templates)
         layout: default
 
