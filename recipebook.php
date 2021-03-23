@@ -3,12 +3,14 @@ namespace Grav\Plugin;
 
 use \DirectoryIterator;
 
+use Grav\Common\Grav;
 use Grav\Common\Page\Page;
 use Grav\Common\Page\Pages;
 // use Grav\Common\User\User;
-use Grav\Plugin\Login\Login;
+// use Grav\Plugin\Login\Login;
 use Grav\Common\Plugin;
 use RocketTheme\Toolbox\Event\Event;
+use Grav\Framework\Flex\Interfaces\FlexObjectInterface;
 
 // the 'use' keyword here works better
 // also drop the .php extension
@@ -22,7 +24,7 @@ class RecipebookPlugin extends Plugin
 {
 
     public $features = [
-        'blueprints' => 100
+        'blueprints' => 100,
     ];
 
     /**
@@ -53,11 +55,44 @@ class RecipebookPlugin extends Plugin
             return;
         }
 
+        $uri = $this->grav['uri'];
+        $len = strlen('/recipes/');
+
+
+        if (substr($uri->path(), 0, $len) == '/recipes/') {
+            $this->enable(['onPageInitialized' => ['onPageInitialized', 0]]);
+        }
+
         return;
     }
 
     public function onPageInitialized()
     {
+        $this->grav['debugger']->addMessage('Making a page!');
+
+        $uri  = $this->grav['uri'];
+        $page = $this->grav['page'];
+
+        $page = new Page;
+        $page->init(new \SplFileInfo(__DIR__ . "/templates/flex/recipes/object/default.html.twig"));
+        $page->parent($this->grav['pages']->find('/recipes'));
+        $page->slug(basename($uri->path()));
+        $page->route($uri->path());
+
+        $id     = substr($uri->path(), strlen('/plugins/'));
+        $object = Grav::instance()->get('flex')->getObject($id, 'recipes');
+
+        $block = $object->render('default', ['my_variable' => true]);
+        $page->content($block);
+
+        $this->grav['debugger']->addMessage('Object Id: ' . $id);
+        $this->grav['debugger']->addMessage('Object: ' . $object);
+
+        $this->grav['pages']->addPage($page, $uri->path());
+
+        unset($this->grav['page']);
+        $this->grav['page'] = $page;
+
         return;
     }
 

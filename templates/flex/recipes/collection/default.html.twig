@@ -1,24 +1,23 @@
 {%- set object_context = object ?? {} -%}
 {%- set object_layout = object_context.layout ?? ('list-' ~ layout) -%}
 
-{{ dump("in collection") }}
-
 <div id="flex-objects">
-	<div class="text-center">
-		<input class="form-input search" type="text" placeholder="Search by title, description, and tags"/>
-		<button class="button button-primary sort asc" data-sort="title">
-			Sort by Name
-		</button>
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="text-center">
+				<input class="form-input search" type="text" placeholder="Search by title, description, and tags"/>
+				<button class="button button-primary sort asc" data-sort="title">
+					Sort by Name
+				</button>
+			</div>
+		</div>
 	</div>
 
-	<ul class="list">
-		{{ dump(collection) }}
+	<div class="row list">
 		{% for object in collection.filterBy({ published: true }) %}
-			<li>
-				{% render object layout: object_layout with object_context %}
-			</li>
+		{% render object layout: object_layout with object_context %}
 		{% endfor %}
-	</ul>
+	</div>
 </div>
 
 <script>

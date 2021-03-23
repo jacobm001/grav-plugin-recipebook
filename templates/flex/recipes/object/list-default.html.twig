@@ -1,21 +1,6 @@
-<div class="entry-details">
-	{% if object.website %}
-		<a href="{{ object.website|e }}">
-			<span class="name">{{ object.last_name|e }},
-				{{ object.first_name|e }}</span>
-		</a>
-	{% else %}
-		<span class="name">{{ object.last_name|e }},
-			{{ object.first_name|e }}</span>
-	{% endif %}
-	{% if object.email %}
-		<p>
-			<a href="mailto:{{ object.email|e }}" class="email">{{ object.email|e }}</a>
-		</p>
-	{% endif %}
-</div>
-<div class="entry-extra">
-	{% for tag in object.tags %}
-		<span>{{ tag|e }}</span>
-	{% endfor %}
+{{ dump(object) }}
+<div class="col-sm-12 col-md-4 col-lg-3">
+	<a href="http://localhost:8080/recipes/{{ object.key|e }}">
+		<span class="title">{{ object.title|e }}</span>
+	</a>
 </div>
