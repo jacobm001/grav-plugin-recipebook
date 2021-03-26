@@ -1,8 +1,15 @@
-<h1>{{ object.title }}</h1>
+<h1 class="display-1">{{ object.title }}</h1>
 
-<h3>Notes:</h3>
+<span><h2 class="display-3">Yields</h2>{{ object.yields }}</span>
+
+<h2 class="display-3">Notes:</h2>
 {{ object.notes|markdown }}
 
+<h2 class="display-3">Ingredients</h2>
 {{ object.ingredients }}
 
+<h2 class="display-3">Directions</h2>
 {{ object.directions }}
+
+<h2 class="display-3">Tags</h2>
+{{ object.tags }}
