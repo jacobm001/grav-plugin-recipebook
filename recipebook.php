@@ -59,9 +59,9 @@ class RecipebookPlugin extends Plugin
         $len = strlen('/recipes/');
 
 
-        if (substr($uri->path(), 0, $len) == '/recipes/') {
-            $this->enable(['onPageInitialized' => ['onPageInitialized', 0]]);
-        }
+        // if (substr($uri->path(), 0, $len) == '/recipes/') {
+        //     $this->enable(['onPageInitialized' => ['onPageInitialized', 0]]);
+        // }
 
         return;
     }
