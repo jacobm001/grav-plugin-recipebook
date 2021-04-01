@@ -40,8 +40,7 @@ class RecipebookPlugin extends Plugin
     public static function getSubscribedEvents()
     {
         return [
-            'onPluginsInitialized'     => ['onPluginsInitialized', 0]
-            , 'onTwigTemplatePaths'    => ['onTwigTemplatePaths', 0]
+            'onTwigTemplatePaths'    => ['onTwigTemplatePaths', 0]
         ];
     }
 
