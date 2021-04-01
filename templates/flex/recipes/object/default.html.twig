@@ -6,10 +6,12 @@
 {{ object.notes|markdown }}
 
 <h2 class="display-3">Ingredients</h2>
-{{ object.ingredients }}
+{{ object.ingredients|markdown }}
 
 <h2 class="display-3">Directions</h2>
-{{ object.directions }}
+{{ object.directions|markdown }}
 
 <h2 class="display-3">Tags</h2>
-{{ object.tags }}
+{% for tag in object.tags %}
+	{{ tag }}{% if not loop.last %},{% endif %}
+{% endfor %}
