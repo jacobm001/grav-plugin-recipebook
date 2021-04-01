@@ -45,57 +45,6 @@ class RecipebookPlugin extends Plugin
         ];
     }
 
-    /**
-     * Initialize the plugin
-     */
-    public function onPluginsInitialized()
-    {
-        // Don't proceed if we are in the admin plugin
-        if ($this->isAdmin()) {
-            return;
-        }
-
-        $uri = $this->grav['uri'];
-        $len = strlen('/recipes/');
-
-
-        // if (substr($uri->path(), 0, $len) == '/recipes/') {
-        //     $this->enable(['onPageInitialized' => ['onPageInitialized', 0]]);
-        // }
-
-        return;
-    }
-
-    public function onPageInitialized()
-    {
-        $this->grav['debugger']->addMessage('Making a page!');
-
-        $uri  = $this->grav['uri'];
-        $page = $this->grav['page'];
-
-        $page = new Page;
-        $page->init(new \SplFileInfo(__DIR__ . "/templates/flex/recipes/object/default.html.twig"));
-        $page->parent($this->grav['pages']->find('/recipes'));
-        $page->slug(basename($uri->path()));
-        $page->route($uri->path());
-
-        $id     = substr($uri->path(), strlen('/plugins/'));
-        $object = Grav::instance()->get('flex')->getObject($id, 'recipes');
-
-        $block = $object->render('default', ['my_variable' => true]);
-        $page->setRawContent($block);
-
-        $this->grav['debugger']->addMessage('Object Id: ' . $id);
-        $this->grav['debugger']->addMessage('Object: ' . $object);
-
-        $this->grav['pages']->addPage($page, $uri->path());
-
-        unset($this->grav['page']);
-        $this->grav['page'] = $page;
-
-        return;
-    }
-
     public function onTwigTemplatePaths()
     {
         $twig = $this->grav['twig'];
