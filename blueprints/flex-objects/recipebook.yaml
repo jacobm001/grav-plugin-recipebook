@@ -1,5 +1,5 @@
-title: recipes
-description: Simple recipebook
+title: Recipebook
+description: A simple recipebook
 type: flex-objects
 
 # Flex Configuration
@@ -8,16 +8,16 @@ config:
   admin:
     # Admin router (optional)
     router:
-      path: '/recipes'
+      path: '/recipebook'
 
     # Admin menu (optional)
     menu:
       list:
-        route: '/recipes'
-        title: Recipes
+        route: '/recipebook'
+        title: Recipebook
         icon: fa-utensils
         # Authorization to collection admin
-        authorize: ['admin.recipes.list', 'admin.super']
+        authorize: ['admin.recipebook.list', 'admin.super']
         # Priority -10 .. 10 (highest goes up)
         priority: 2
 
@@ -27,9 +27,9 @@ config:
     # Permissions
     permissions:
       # Primary permissions
-      admin.recipes:
+      admin.recipebook:
         type: crudpl
-        label: Recipes
+        label: Recipebook
 
     # List view
     list:
@@ -100,7 +100,7 @@ config:
           # File formatter class, in this case the file is stored in markdown
           class: 'Grav\Framework\File\Formatter\JsonFormatter'
         # JSON file where all the objects will be stored
-        folder: user-data://flex-objects/recipes.json
+        folder: user-data://flex-objects/recipebook.json
     search:
       # Search options
       options:
@@ -138,10 +138,8 @@ form:
       label: Yields
 
     notes:
-      type: textarea
+      type: markdown
       label: Notes
-      validate:
-        required: true
 
     ingredients:
       type: markdown
@@ -152,6 +150,8 @@ form:
     directions:
       type: markdown
       label: Directions
+      validate:
+        required: true
 
     tags:
       type: selectize
