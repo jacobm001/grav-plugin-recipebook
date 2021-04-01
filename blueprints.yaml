@@ -1,7 +1,7 @@
 name: Recipebook
-version: 1.0.0
+version: 2.0.0
 description: A grav plugin that adds recipebook functionality to a grav setup
-icon: cutlery
+icon: fa-utensils
 author:
   name: Jacob Mastel
   email: jacob@mastel.org
@@ -25,19 +25,3 @@ form:
         0: Disabled
       validate:
         type: bool
-    route_new:
-      type: text
-      label: Route - New Recipe
-      default: /recipebook/new
-    route_view:
-      type: text
-      label: Route - View Recipe
-      default: /recipebook/view
-    route_edit:
-      type: text
-      label: Route - Edit Recipe
-      default: /recipebook/edit
-    route_list:
-      type: text
-      label: Route - View Recipes
-      default: /recipebook
