@@ -9,7 +9,7 @@
 {{ object.ingredients|vulgarize|markdown }}
 
 <h2 class="display-3">Directions</h2>
-{{ object.directions|markdown }}
+{{ object.directions|vulgarize|markdown }}
 
 <h2 class="display-3">Tags</h2>
 {% for tag in object.tags %}
