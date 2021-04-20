@@ -1,17 +1,43 @@
-<h1 class="display-1">{{ object.title }}</h1>
+<div class="row">
+	<div class="col-xs-12">
+		<h1 class="display-1">{{ object.title }}</h1>
+	</div>
+<div>
 
-<span><h2 class="display-3">Yields</h2>{{ object.yields }}</span>
+<div class="row">
+	{% if object.yields %}
+	<div class="col-xs-12 col-sm-6">
+		<span><h2 class="display-3">Yields</h2>{{ object.yields }}</span>
+	</div>
+	{% endif %}
 
-<h2 class="display-3">Notes:</h2>
-{{ object.notes|markdown }}
+	{% if object.tags %}
+	<div class="col-xs-12 col-sm-6">
+		<h2 class="display-3">Tags</h2>
+		{% for tag in object.tags %}
+		{{ tag }}{% if not loop.last %},{% endif %}
+		{% endfor %}
+	</div>
+	{% endif %}
+</div>
 
-<h2 class="display-3">Ingredients</h2>
-{{ object.ingredients|vulgarize|markdown }}
+{% if object.notes %}
+<div class="row">
+	<div class="col-xs-12">
+		<h2 class="display-3">Notes:</h2>
+		{{ object.notes|markdown }}
+	</div>
+</div>
+{% endif %}
 
-<h2 class="display-3">Directions</h2>
-{{ object.directions|vulgarize|markdown }}
+<div class="row">
+	<div class="col-xs-12 col-md-5 col-lg-4">
+		<h2 class="display-3">Ingredients</h2>
+		{{ object.ingredients|vulgarize|markdown }}
+	</div>
 
-<h2 class="display-3">Tags</h2>
-{% for tag in object.tags %}
-	{{ tag }}{% if not loop.last %},{% endif %}
-{% endfor %}
+	<div class="col-xs-12 col-md-7 col-lg-8">
+		<h2 class="display-3">Directions</h2>
+		{{ object.directions|vulgarize|markdown }}
+	</div>
+</div>
