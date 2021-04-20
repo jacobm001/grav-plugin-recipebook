@@ -1,7 +1,7 @@
 name: Recipebook
 version: 2.0.0
 description: A grav plugin that adds recipebook functionality to a grav setup
-icon: fa-utensils
+icon: utensils
 author:
   name: Jacob Mastel
   email: jacob@mastel.org
