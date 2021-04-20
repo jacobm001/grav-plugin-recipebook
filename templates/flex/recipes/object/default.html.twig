@@ -4,9 +4,10 @@
 	</div>
 <div>
 
-{% if object.yields or object.tags %}
+
 <div class="row">
-	<div class="col-xs-12">
+{% if object.yields or object.tags %}
+	<div class="col-xs-12 col-md-5 col-lg-4">
 		<h2 class="display-5">Details</h2>
 		<p>
 			{% if object.yields %}
@@ -17,14 +18,18 @@
 			{% endif %}
 		</p>
 	</div>
-</div>
 {% endif %}
+{% if object.notes %}
+	<div class="col-xs-12 col-md-7 col-lg-8">
+		<h2 class="display-5">Notes</h2>
+		{{ object.notes|markdown }}
+	</div>
+{% endif %}
+</div>
+
 
 <div class="row">
-	{% if object.notes %}
-	<h2 class="display-5">Notes</h2>
-	{{ object.notes|markdown }}
-	{% endif %}
+
 </div>
 
 <div class="row">
