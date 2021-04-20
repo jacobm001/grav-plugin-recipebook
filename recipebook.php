@@ -75,7 +75,7 @@ class RecipebookPlugin extends Plugin
             , '⅙', '⅚', '⅛', '⅜', '⅝', '⅞'
         );
 
-        return mb_convert_encoding(str_replace($search, $replace, $string), 'UTF-8');
+        return str_replace($search, $replace, $string);
     }
 
     public function onTwigTemplatePaths()
