@@ -14,7 +14,7 @@
 			Yields: {{ object.yields|vulgarize }}<br/>
 			{% endif %}
 			{% if object.tags %}
-			Tags: {% for tag in object.tags %}{{ tag }}{% if not loop.last %}, {% endif %}{% endfor %}<br/>
+			<i class="fa fa-tags"></i> {% for tag in object.tags %}{{ tag }}{% if not loop.last %}, {% endif %}{% endfor %}<br/>
 			{% endif %}
 		</p>
 	</div>
