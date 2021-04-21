@@ -6,11 +6,13 @@
 			</div>
 			<p class="card-text">
 				<small>
+					{% if object.tags %}
 					<span class="tags"><i class="fa fa-tags"></i>
 					{% for tag in object.tags %}
 					{{ tag }}{% if not loop.last %},{% endif %}
 					{% endfor %}
 					</span>
+					{% endif %}
 				</small>
 			</p>
 		</div>
