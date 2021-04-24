@@ -21,7 +21,7 @@
 	</div>
 
 	<div class="row top-buffer list">
-		{% for object in collection.filterBy({ published: true }) %}
+		{% for object in collection.sort({'title': 'ASC'}).filterBy({ published: true }) %}
 		{% render object layout: object_layout with object_context %}
 		{% endfor %}
 	</div>
