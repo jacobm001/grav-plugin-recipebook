@@ -1,20 +1,8 @@
 <?php
 namespace Grav\Plugin;
 
-use \DirectoryIterator;
-
-use Grav\Common\Grav;
-use Grav\Common\Page\Page;
-use Grav\Common\Page\Pages;
-// use Grav\Common\User\User;
-// use Grav\Plugin\Login\Login;
 use Grav\Common\Plugin;
 use RocketTheme\Toolbox\Event\Event;
-use Grav\Framework\Flex\Interfaces\FlexObjectInterface;
-
-// the 'use' keyword here works better
-// also drop the .php extension
-// include 'classes\recipe.php';
 
 /**
  * Class RecipebookPlugin
@@ -48,7 +36,7 @@ class RecipebookPlugin extends Plugin
      *     callable (or function) as well as the priority. The
      *     higher the number the higher the priority.
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             'onTwigTemplatePaths' => ['onTwigTemplatePaths', 0]
